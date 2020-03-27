@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +7,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Timesheet
 {
+    using System;
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.OpenApi.Models;
+    using Timesheet.ApplicationServices;
+    using Timesheet.ApplicationServices.Interfaces;
+    using Timesheet.Data;
+    using Timesheet.Domain.Builders;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -15,21 +24,47 @@ namespace Timesheet
             Configuration = configuration;
         }
 
+        public ILifetimeScope AutofacContainer { get; private set; }
+
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            var connection = ConfigurationExtensions.GetConnectionString(this.Configuration, "DefaultConnection");
+            services.AddDbContext<TimesheetContext>(options => options.UseSqlServer(connection));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Timesheet API",
+                    Description = "Timesheet API"
+                });
+            });
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            builder.RegisterType<AppointmentService>().As<IAppointmentService>();
+            builder.RegisterType<AppointmentRepository>().As<IAppointmentRepository>();
+            builder.RegisterType<AppointmentBuilder>().As<IAppointmentBuilder>();
+            builder.RegisterType<AppointmentValidator>().As<IAppointmentValidator>();
+            builder.RegisterType<TimesheetService>().As<ITimesheetService>();
+            builder.RegisterType<TimesheetRepository>().As<ITimesheetRepository>();
+
+            AutofacContainer = builder.Build();
+
+            return new AutofacServiceProvider(AutofacContainer);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -39,26 +74,22 @@ namespace Timesheet
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller}/{action=Index}/{id?}");
+            //});
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
@@ -66,6 +97,9 @@ namespace Timesheet
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            app.UseSwagger();
+           
         }
     }
 }

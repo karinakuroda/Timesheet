@@ -10,11 +10,16 @@
 
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <UserSecretsId>44525c83-cab6-489c-a2d3-7a293148c30a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.1.2" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.2.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.2.1" />
   </ItemGroup>
 
   <ItemGroup>
