@@ -1,15 +1,21 @@
 <div class="jumbotron">
   <h1 class="display-4">Hello!</h1>
   <p class="lead">This is your appointment page, here you can register the time spend on your projects.</p>
+  <div *ngIf="hasOpenAppointment">
+    <hr class="my-4">
+    <p class="lead">
+      Time elapsed since you start working: {{elapsedTime}}
+    </p>
+  </div>
   <hr class="my-4">
 
   <div class="container">
     <div class="row">
-      <div class="col-sm">
-        <button class="btn btn-outline-secondary btn-lg" data-toggle="modal" data-target="#modalStartAppointment">Start Appointment</button>
+      <div class="col-sm" *ngIf="!hasOpenAppointment">
+        <button class="btn btn-outline-success btn-lg" data-toggle="modal" data-target="#modalStartAppointment">Start Appointment</button>
       </div>
-      <div class="col-sm">
-        <button class="btn btn-outline-secondary btn-lg" (click)="stopAppointment()">Stop Appointment</button>
+      <div class="col-sm" *ngIf="hasOpenAppointment">
+        <button class="btn btn-outline-danger btn-lg" (click)="stopAppointment()">Stop Appointment</button>
       </div>
       <div class="col-sm">
         <button class="btn btn-outline-secondary btn-lg" data-toggle="modal" data-target="#exampleModal" (click)="onNewAppointment()">Add new appointment</button>
@@ -53,7 +59,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="button" class="btn btn-outline-success" type="submit" (click)="startAppointment(appointmentStartForm.value)">Save</button>
+        <button class="button" class="btn btn-outline-success" type="submit" data-dismiss="modal" (click)="startAppointment(appointmentStartForm.value)">Save</button>
       </div>
     </div>
   </div>
@@ -110,8 +116,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="button" class="btn btn-outline-success" type="submit" *ngIf="appointmentForm.value.id==null" (click)="add(appointmentForm.value)">Save</button>
-        <button class="button" class="btn btn-outline-success" type="submit" *ngIf="!appointmentForm.value.id==''" (click)="update(appointmentForm.value)">Save Changes</button>
+        <button class="button" class="btn btn-outline-success" type="submit" data-dismiss="modal" *ngIf="appointmentForm.value.id==null" (click)="add(appointmentForm.value)">Save</button>
+        <button class="button" class="btn btn-outline-success" type="submit" data-dismiss="modal" *ngIf="!appointmentForm.value.id==''" (click)="update(appointmentForm.value)">Save Changes</button>
       </div>
     </div>
   </div>
@@ -134,7 +140,6 @@
     <tbody>
       <tr *ngFor="let appointment of appointments">
         <th scope="row">
-
           <button class="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" type="submit" (click)="onEditAppointment(appointment)">Edit</button>
         </th>
         <th scope="row">
