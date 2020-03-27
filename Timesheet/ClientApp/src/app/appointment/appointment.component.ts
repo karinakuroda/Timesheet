@@ -1,57 +1,104 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { CalendarModule } from 'primeng/calendar';
-//import { TableModule } from 'primeng/table';
+import { formatDate } from "@angular/common";
+import { Appointment } from './appointment';
+import { AppointmentService } from './appointment.service';
 
 @Component({
   selector: 'app-appointment-component',
   templateUrl: './appointment.component.html'
 })
 export class AppointmentComponent implements OnInit {
-  checkoutForm;
-  items;
-  success;
-  public currentCount = 0;
+  public appointmentForm;
+  public appointmentStartForm;
   public timesheetId = "2067df1b-b937-4a8f-97af-08d7d1d8e7fb";
-  public appointments: any[];
-  public showManually: boolean = false;
+  public appointments: Appointment[] = [];
 
-  constructor(private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string,
-    private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private appointmentService: AppointmentService) {
+    this.appointmentStartForm = this.formBuilder.group({
+      projectId: 0,
+      description: ''
+    });
 
-    this.checkoutForm = this.formBuilder.group({
+    this.appointmentForm = this.formBuilder.group({
+      id: '',
+      timesheetId: '',
       start: '',
       end: '',
-      projectId: '',
-      description:''
+      projectId: 0,
+      description: ''
     });
   }
 
   ngOnInit() {
-    this.items = [];//this.cartService.getItems();
+    this.refreshList();
+  }
 
-    this.http.get<any[]>(this.baseUrl + '/timesheets/' + this.timesheetId + '/appointments').subscribe(result => {
+  refreshList() {
+    this.appointmentService.getAll(this.timesheetId).subscribe(result => {
       this.appointments = result;
     }, error => console.error(error));
   }
-
-  onSubmit(data) {
-    this.http.post<any[]>(this.baseUrl + '/timesheets/' + this.timesheetId + '/appointments', data).subscribe(result => {
-      this.success = result;
+  
+  add(data) {
+    this.appointmentService.post(this.timesheetId, data).subscribe(result => {
+      this.refreshList();
+      this.appointmentForm.reset();
+    }, error => console.error(error));
+  }
+  
+  update(data: Appointment) {
+    this.appointmentService.put(this.timesheetId, data.id, data).subscribe(result => {
+      this.refreshList();
+      this.appointmentForm.reset();
     }, error => console.error(error));
   }
 
-  public addManually() {
-    this.showManually = !this.showManually;
+  deleteAppointment(id) {
+    this.appointmentService.delete(this.timesheetId, id).subscribe(() => {
+      this.refreshList();
+    });
   }
 
-  public saveManually() {
-   
+  startAppointment(data) {
+    let dateNow = formatDate(Date.now(), "MM/dd/yyyy HH:mm", "en-US");
+    
+    let startAppointment: Appointment = <Appointment>{
+      timesheetId : this.timesheetId,
+      start: dateNow,
+      projectId : data.projectId,
+      description : data.description,
+    }
+
+    this.add(startAppointment);
   }
 
-  public cancel() {
-    this.showManually = false;
+  stopAppointment() {
+    let dateNow = formatDate(Date.now(), "MM/dd/yyyy HH:mm", "en-US");
+    var lastAppointment = this.appointments.filter(element => element.end === "0001-01-01T00:00:00");
+    this.appointmentService.patchStopAppointment(this.timesheetId, lastAppointment[0].id, dateNow).subscribe(result => {
+      this.refreshList();
+      this.appointmentForm.reset();
+    }, error => console.error(error));
   }
+
+  onNewAppointment() {
+    this.appointmentForm.reset();
+  }
+  
+  onEditAppointment(data: Appointment) {
+    let dateStart = formatDate(data.start, "MM/dd/yyyy HH:mm", "en-US");
+    let dateEnd = formatDate(data.end, "MM/dd/yyyy HH:mm", "en-US");
+
+    this.appointmentForm = this.formBuilder.group({
+      id: data.id,
+      timesheetId: data.timesheetId,
+      start: dateStart,
+      end: dateEnd,
+      projectId: data.projectId,
+      description: data.description
+    });
+  }
+
+ 
 }

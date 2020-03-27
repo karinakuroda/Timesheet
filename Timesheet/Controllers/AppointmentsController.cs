@@ -4,6 +4,7 @@ namespace Timesheet.Controllers
     using System.Net.Mime;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.JsonPatch;
     using Microsoft.AspNetCore.Mvc;
     using Timesheet.ApplicationServices.DTO;
     using Timesheet.ApplicationServices.Interfaces;
@@ -67,7 +68,7 @@ namespace Timesheet.Controllers
                 return this.BadRequest(this.appointmentValidator.ErrorList);
             }
 
-            var result = await this.appointmentService.ProcessAsync(timesheetId, request);
+            var result = await this.appointmentService.PostAsync(timesheetId, request);
 
             var routeValues = new
             {
@@ -76,6 +77,49 @@ namespace Timesheet.Controllers
             };
 
             return this.CreatedAtAction(nameof(this.GetByIdAsync), routeValues, result);
+        }
+
+        [HttpDelete("timesheets/{timesheetId}/appointments/{id}")]
+        [ProducesResponseType(typeof(IActionResult), StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteAsync(Guid timesheetId, Guid id)
+        {
+            await this.appointmentService.DeleteAsync(timesheetId, id);
+
+            return this.NoContent();
+        }
+
+        [HttpPatch("timesheets/{timesheetId}/appointments/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PatchAsync([FromRoute]Guid timesheetId, [FromRoute]Guid id, [FromBody] JsonPatchDocument<Appointment> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return this.BadRequest();
+            }
+
+            await this.appointmentService.PatchAsync(timesheetId, id, patchDoc);
+
+            return this.NoContent();
+        }
+
+        [HttpPut("timesheets/{timesheetId}/appointments/{id}")]
+        [ProducesResponseType(typeof(IActionResult), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Put([FromRoute]Guid timesheetId, [FromRoute]Guid id, [FromBody] AppointmentDTO request)
+        {
+            var isValidAppointment = this.appointmentValidator.IsValid(request);
+
+            if (!isValidAppointment)
+            {
+                return this.BadRequest(this.appointmentValidator.ErrorList);
+            }
+
+            await this.appointmentService.PutAsync(timesheetId, id, request);
+            
+            return this.NoContent();
         }
     }
 }

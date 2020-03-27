@@ -12,6 +12,15 @@
 
         public DateTime End { get; set; }
 
+        public TimeSpan TimeSpent
+        {
+            get
+            {
+                TimeSpan diff = this.End - this.Start;
+                return diff;
+            }
+        }
+
         public int ProjectId { get; set; }
 
         public Project Project { get; set; }

@@ -1,8 +1,7 @@
 ﻿namespace Timesheet.Domain.Builders
 {
     using System;
-    using System.Collections.Generic;
-    
+
     public class AppointmentBuilder : IAppointmentBuilder
     {
         private readonly Appointment appointment;
@@ -10,6 +9,12 @@
         public AppointmentBuilder()
         {
             this.appointment = new Appointment();
+        }
+
+        public AppointmentBuilder SetId(Guid id)
+        {
+            this.appointment.Id = id;
+            return this;
         }
 
         public AppointmentBuilder SetTimesheetId(Guid timesheetId)

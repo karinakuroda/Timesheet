@@ -8,6 +8,8 @@
 
         AppointmentBuilder SetDescription(string description);
 
+        AppointmentBuilder SetId(Guid id);
+
         AppointmentBuilder SetTimesheetId(Guid id);
 
         AppointmentBuilder SetStart(DateTime dateTime);

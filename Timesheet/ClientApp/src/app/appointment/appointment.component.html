@@ -1,144 +1,152 @@
-<h1>Appointments</h1>
+<div class="jumbotron">
+  <h1 class="display-4">Hello!</h1>
+  <p class="lead">This is your appointment page, here you can register the time spend on your projects.</p>
+  <hr class="my-4">
 
-<p>Here you can register the time spend on your projects.</p>
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm">
-      <button class="btn btn-outline-secondary btn-lg" (click)="start()">Start Appointment</button>
-    </div>
-    <div class="col-sm">
-      <button class="btn btn-outline-secondary btn-lg" (click)="stop()">Stop Appointment</button>
-    </div>
-    <div class="col-sm">
-      <button class="btn btn-outline-secondary btn-lg" (click)="addManually()">Add Manually</button>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <button class="btn btn-outline-secondary btn-lg" data-toggle="modal" data-target="#modalStartAppointment">Start Appointment</button>
+      </div>
+      <div class="col-sm">
+        <button class="btn btn-outline-secondary btn-lg" (click)="stopAppointment()">Stop Appointment</button>
+      </div>
+      <div class="col-sm">
+        <button class="btn btn-outline-secondary btn-lg" data-toggle="modal" data-target="#exampleModal" (click)="onNewAppointment()">Add new appointment</button>
+      </div>
     </div>
   </div>
 </div>
 
 
-<!--<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
-
-  <div>
-    <label for="name">
-      Name
-    </label>
-    <input id="name" type="text" formControlName="name">
-  </div>
-
-  <div>
-    <label for="address">
-      Address
-    </label>
-    <input id="address" type="text" formControlName="address">
-  </div>
-
-  <button class="button" type="submit">Purchase</button>
-
-</form>-->
-
-
-<div [hidden]="showManually">
-  <h2>Add Manually</h2>
-  <h3>Here you can register manually the time spend on your projects.</h3>
-
-  <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)" class="border-0">
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputStart">Start</label>
-        <div class="container">
-          <p-calendar formControlName="start" showTime="true" hourFormat="24"></p-calendar>
+<!-- Modal Start-->
+<div class="modal fade" id="modalStartAppointment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Start appointment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <p class="lead">Fill the following fields to start a new appointment:</p>
+          <hr class="my-4">
+          <form [formGroup]="appointmentStartForm" class="border-0">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="inputState">Project</label>
+                <select id="inputState" class="form-control" formControlName="projectId">
+                  <option selected>Choose...</option>
+                  <option value="1">Timesheet</option>
+                  <option value="2">DirReduce</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputDescription">Description</label>
+              <input type="text" class="form-control" id="inputDescrition" placeholder="Description Here" formControlName="description">
+            </div>
+          </form>
         </div>
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button class="button" class="btn btn-outline-success" type="submit" (click)="startAppointment(appointmentStartForm.value)">Save</button>
+      </div>
     </div>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputStop">End</label>
-        <div class="container">
-          <p-calendar formControlName="end" showTime="true" hourFormat="24"></p-calendar>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add appointment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <p class="lead">Fill the following fields to add a new appointment:</p>
+          <hr class="my-4">
+          <form [formGroup]="appointmentForm" class="border-0">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputStart">Start</label>
+                <div class="container">
+                  <p-calendar formControlName="start" showTime="true" hourFormat="24"></p-calendar>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputStop">End</label>
+                <div class="container">
+                  <p-calendar formControlName="end" showTime="true" hourFormat="24"></p-calendar>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="inputState">Project</label>
+                <select id="inputState" class="form-control" formControlName="projectId">
+                  <option selected>Choose...</option>
+                  <option value="1">Timesheet</option>
+                  <option value="2">DirReduce</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputDescription">Description</label>
+              <input type="text" class="form-control" id="inputDescrition" placeholder="Description Here" formControlName="description">
+            </div>
+          </form>
         </div>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="inputState">Project</label>
-        <select id="inputState" class="form-control" formControlName="projectId">
-          <option selected>Choose...</option>
-          <option value="1">Timesheet</option>
-          <option value="2">DirReduce</option>
-        </select>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button class="button" class="btn btn-outline-success" type="submit" *ngIf="appointmentForm.value.id==null" (click)="add(appointmentForm.value)">Save</button>
+        <button class="button" class="btn btn-outline-success" type="submit" *ngIf="!appointmentForm.value.id==''" (click)="update(appointmentForm.value)">Save Changes</button>
       </div>
     </div>
-    <div class="form-group">
-      <label for="inputDescription">Description</label>
-      <input type="text" class="form-control" id="inputDescrition" placeholder="Description Here" formControlName="description">
-    </div>
-    <button class="button" class="btn btn-outline-success" type="submit">Save</button>
-  </form>
+  </div>
 </div>
 
-
-<!--<p-table [value]="appointments">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Vin</th>
-      <th>Year</th>
-      <th>Brand</th>
-      <th>Color</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-appointment>
-    <tr>
-      <td>{{appointment.start | date:'shortDate'}}</td>
-      <td>{{appointment.start | date:'shortTime'}}</td>
-      <td>{{appointment.end | date:'shortDate'}}</td>
-      <td>{{appointment.end | date:'shortTime'}}</td>
-    </tr>
-  </ng-template>
-</p-table>-->
-
-
+<!-- List -->
 <div class="container">
-  <h2>This is your list</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">#</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Project</th>
+        <th scope="col">Description</th>
+        <th scope="col">Time Spent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let appointment of appointments">
+        <th scope="row">
 
-  <div class="row">
-    <div class="col-sm">
-      Start Date
-    </div>
-    <div class="col-sm">
-      Start Time
-    </div>
-    <div class="col-sm">
-      End Date
-    </div>
-    <div class="col-sm">
-      End Time
-    </div>
-    <div class="col-sm">
-      Project
-    </div>
-    <div class="col-sm">
-      Description
-    </div>
-  </div>
-  <div class="row" *ngFor="let appointment of appointments">
-    <div class="col-sm">
-      {{appointment.start | date:'shortDate'}}
-    </div>
-    <div class="col-sm">
-      {{appointment.start | date:'shortTime' }}
-    </div>
-    <div class="col-sm">
-      {{appointment.end | date: 'shortDate'}}
-    </div>
-    <div class="col-sm">
-      {{appointment.end | date:'shortTime' }}
-    </div>
-    <div class="col-sm">
-      {{appointment.project.name}}
-    </div>
-    <div class="col-sm">
-      {{appointment.description}}
-    </div>
-  </div>
+          <button class="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal" type="submit" (click)="onEditAppointment(appointment)">Edit</button>
+        </th>
+        <th scope="row">
+          <button class="button" class="btn btn-outline-danger" type="submit" (click)="deleteAppointment(appointment.id)">Remove</button>
+        </th>
+        <td>{{appointment.start | date:'MM/dd/yyyy HH:mm'}}</td>
+        <td>{{appointment.end | date: 'MM/dd/yyyy HH:mm'}}</td>
+        <td>{{appointment.project.name}}</td>
+        <td>{{appointment.description}}</td>
+        <td>{{appointment.timeSpent}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+

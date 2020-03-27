@@ -47,20 +47,20 @@
 
         private bool HasValidDates()
         {
-            if (this.IsNull() || 
-                this.StartBiggerThanEnd() ||
-                this.DatesBiggerThanNow())
-            {
-                this.ErrorList.Add("Invalid Date");
-                return false;
-            }
+            //if (this.IsNull() || 
+            //    this.StartBiggerThanEnd() ||
+            //    this.DatesBiggerThanNow())
+            //{
+            //    this.ErrorList.Add("Invalid Date");
+            //    return false;
+            //}
 
             return true;
         }
 
         private bool StartBiggerThanEnd()
         {
-            if (this.appointmentDto.Start >= this.appointmentDto.End)
+            if (this.appointmentDto.Start > this.appointmentDto.End)
             {
                 return true;
             }
