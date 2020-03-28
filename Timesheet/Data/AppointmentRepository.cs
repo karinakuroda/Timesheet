@@ -31,7 +31,7 @@
         public Task<List<Appointment>> GetAllAsync(Guid timesheetId)
         {
             return this.context.Appointments.Include(i => i.Project).Where(w => w.TimesheetId == timesheetId)
-                .ToListAsync();
+                .OrderByDescending(o => o.Start).ToListAsync();
         }
 
         public async Task DeleteAsync(Guid timesheetId, Guid id)
