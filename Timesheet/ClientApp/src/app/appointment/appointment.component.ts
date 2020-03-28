@@ -9,31 +9,30 @@ import { AppointmentService } from './appointment.service';
   templateUrl: './appointment.component.html'
 })
 export class AppointmentComponent implements OnInit {
-  public appointmentForm;
-  public appointmentStartForm;
-  public timesheetId;
-  public projectIdSelected:number;
-  public appointments: Appointment[] = [];
-  public hasOpenAppointment: boolean;
-  public elapsedTime: string;
-  private openedAppointment;
+  appointmentForm;
+  appointmentStartForm;
+  timesheetId;
+  projectIdSelected: number;
+  startSelected;
+  endSelected;
+  appointments: Appointment[] = [];
+  hasOpenAppointment: boolean;
+  elapsedTime: string;
   private timer;
-  private dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
-  private dateTimeFormatWithoutSeconds = "MM/dd/yyyy HH:mm";
-
+  
   constructor(private formBuilder: FormBuilder, private appointmentService: AppointmentService) {
     this.appointmentStartForm = this.formBuilder.group({
       projectId: 0,
-      description: ''
+      description: ""
     });
 
     this.appointmentForm = this.formBuilder.group({
-      id: '',
-      timesheetId: '',
-      start: '',
-      end: '',
+      id: "",
+      timesheetId: "",
+      start: "",
+      end: "",
       projectId: 0,
-      description: ''
+      description: ""
     });
   }
 
@@ -44,15 +43,20 @@ export class AppointmentComponent implements OnInit {
       },
       error => this.treatError(error));
   }
+
   setProjectId(value) {
     this.projectIdSelected = value;
     this.refreshList();
   }
+
+  onSelectedStart() {
+    this.refreshList();
+  }
+
   refreshList() {
-    this.appointmentService.getAll(this.timesheetId, this.projectIdSelected).subscribe(result => {
+    this.appointmentService.getAll(this.timesheetId, this.projectIdSelected, this.startSelected, this.endSelected).subscribe(result => {
         this.appointments = result;
         this.configureOpenedAppointment();
-
       },
       error => this.treatError(error));
   }
@@ -79,11 +83,9 @@ export class AppointmentComponent implements OnInit {
   }
 
   startAppointment(data) {
-    let dateNow = formatDate(Date.now(), this.dateTimeFormat, "en-US");
-
     let startAppointment: Appointment = <Appointment>{
       timesheetId: this.timesheetId,
-      start: dateNow,
+      start: this.appointmentService.getFormatedDate(Date.now()),
       projectId: data.projectId,
       description: data.description,
     }
@@ -92,7 +94,7 @@ export class AppointmentComponent implements OnInit {
   }
 
   stopAppointment() {
-    let dateNow = formatDate(Date.now(),this.dateTimeFormat, "en-US");
+    let dateNow = this.appointmentService.getFormatedDate(Date.now());
     let lastAppointment = this.appointments.filter(element => element.end === null);
     this.appointmentService.patchStopAppointment(this.timesheetId, lastAppointment[0].id, dateNow).subscribe(result => {
       this.refreshList();
@@ -106,9 +108,9 @@ export class AppointmentComponent implements OnInit {
   }
 
   onEditAppointment(data: Appointment) {
-    let dateStart = formatDate(data.start, this.dateTimeFormatWithoutSeconds, "en-US");
-    let dateEnd = formatDate(data.end, this.dateTimeFormatWithoutSeconds, "en-US");
-
+    let dateStart = this.appointmentService.getFormatedDateWithoutSeconds(data.start);
+    let dateEnd = this.appointmentService.getFormatedDateWithoutSeconds(data.end);
+    
     this.appointmentForm = this.formBuilder.group({
       id: data.id,
       timesheetId: data.timesheetId,
@@ -123,19 +125,17 @@ export class AppointmentComponent implements OnInit {
     this.hasOpenAppointment = this.appointments.filter(element => element.end === null).length > 0;
 
     if (this.hasOpenAppointment) {
-      this.openedAppointment = this.appointments.filter(element => element.end === null)[0];
-      this.configureTimer(this.openedAppointment.start);
+      let openedAppointment = this.appointments.filter(element => element.end === null)[0];
+      this.configureTimer(openedAppointment.start);
     }
   }
 
   private configureTimer(startedDate:string) {
      this.timer = setInterval(() => {
-      
       let eventStartTime = new Date(startedDate);
       let eventEndTime = new Date();
       let duration = eventEndTime.valueOf() - eventStartTime.valueOf();
       this.elapsedTime = formatDate(new Date(0, 0, 0, 0, 0, 0, duration), "HH:mm:ss", "en-US");
-      
     }, 1000);
   }
 

@@ -35,6 +35,8 @@
                 .Where(w => w.TimesheetId == timesheetId || timesheetId == default(Guid))
                 .Where(w => w.ProjectId == filterDto.ProjectId || filterDto.ProjectId == default(int))
                 .Where(w => w.Description == filterDto.Description || filterDto.Description == default(string))
+                .Where(w => w.Start >= filterDto.Start || filterDto.Start == default(DateTime?))
+                .Where(w => w.End <= filterDto.End || filterDto.End == default(DateTime?))
                 .OrderByDescending(o => o.Start).ToListAsync();
         }
 

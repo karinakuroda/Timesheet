@@ -2,6 +2,7 @@ import { Appointment } from './appointment';
 import { Observable, of } from 'rxjs';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { formatDate } from "@angular/common";
 
 @Injectable({
   providedIn: 'root',
@@ -10,16 +11,36 @@ export class AppointmentService {
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
 
   }
+  private dateTimeFormatWithoutSeconds = "MM/dd/yyyy HH:mm";
+  private dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
 
-  public getTimesheetByUser(username: string): Observable<any> {
-    return this.http.get<any[]>(this.baseUrl + 'api/timesheets?username=' + username);
+  public getFormatedDate(date) {
+    return formatDate(date, this.dateTimeFormat, "en-US");
   }
 
-  public getAll(timesheetId: string, projectId?: number): Observable<any> {
-    let url = this.getUrl(timesheetId);
+  public getFormatedDateWithoutSeconds(date) {
+    return formatDate(date, this.dateTimeFormatWithoutSeconds, "en-US");
+  }
+
+  public getTimesheetByUser(username: string): Observable<any> {
+    return this.http.get<any[]>(this.baseUrl + "api/timesheets?username=" + username);
+  }
+
+  public getAll(timesheetId: string, projectId?: number, startSelected?, endSelected?): Observable<any> {
+    let url = this.getUrl(timesheetId)+'?';
 
     if (projectId != null) {
-      url += '?projectId=' + projectId;
+      url += "projectId=" + projectId;
+    }
+
+    if (startSelected != null) {
+      let dateStart = this.getFormatedDateWithoutSeconds(startSelected);
+      url += "&start=" + dateStart;
+    }
+
+    if (endSelected != null) {
+      let dateEnd = this.getFormatedDateWithoutSeconds(endSelected);
+      url += "&end=" + dateEnd;
     }
 
     return this.http.get<any[]>(url);
@@ -28,7 +49,7 @@ export class AppointmentService {
   public patchStopAppointment(timesheetId: string, id: string, dateTimeEnd: string): Observable<any> {
     let patchData: any[] = [];
 
-    patchData.push(this.createDataToModify(dateTimeEnd, 'end'));
+    patchData.push(this.createDataToModify(dateTimeEnd, "end"));
 
     return this.http.patch<any[]>(this.getUrl(timesheetId, id), patchData);
   }
@@ -46,10 +67,10 @@ export class AppointmentService {
   }
 
   private getUrl(timesheetId: string, id?: string): string {
-    let url = this.baseUrl + 'api/timesheets/' + timesheetId + '/appointments';
+    let url = this.baseUrl + "api/timesheets/" + timesheetId + "/appointments";
 
     if (id != null) {
-      url += '/' + id;
+      url += "/" + id;
     }
 
     return url;
