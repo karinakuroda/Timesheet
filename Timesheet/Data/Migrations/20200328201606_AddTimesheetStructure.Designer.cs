@@ -10,8 +10,8 @@ using Timesheet.Data;
 namespace Timesheet.Data.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    [Migration("20200327153833_AddTimeSpent")]
-    partial class AddTimeSpent
+    [Migration("20200328201606_AddTimesheetStructure")]
+    partial class AddTimesheetStructure
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,7 +28,7 @@ namespace Timesheet.Data.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<DateTime>("End");
+                    b.Property<DateTime?>("End");
 
                     b.Property<int>("ProjectId");
 
@@ -83,6 +83,13 @@ namespace Timesheet.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Timesheets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("edd1e000-a73f-4d5c-98bc-2d09a71a0804"),
+                            UserName = "karina.kuroda"
+                        });
                 });
 
             modelBuilder.Entity("Timesheet.Domain.Appointment", b =>

@@ -85,7 +85,7 @@ namespace Timesheet.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0dbce2c5-daad-475b-aec7-406987548287"),
+                            Id = new Guid("edd1e000-a73f-4d5c-98bc-2d09a71a0804"),
                             UserName = "karina.kuroda"
                         });
                 });
