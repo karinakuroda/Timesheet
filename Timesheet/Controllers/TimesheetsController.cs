@@ -5,6 +5,7 @@ namespace Timesheet.Controllers
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Timesheet.ApplicationServices.DTO;
     using Timesheet.ApplicationServices.Interfaces;
     using Timesheet.Domain;
 
@@ -17,33 +18,39 @@ namespace Timesheet.Controllers
         {
             this.timesheetService = timesheetService;
         }
-
-        /// <summary>
-        /// GET Timesheet By Id
-        /// </summary>
-        /// <param name="id">Universally Unique Identifier of the payment</param>
-        /// <returns></returns>
+        
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Appointment), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAsync(Guid id)
         {
-            var payment = await this.timesheetService.GetAsync(id);
+            var timesheet = await this.timesheetService.GetAsync(id);
 
-            if (payment == null)
+            if (timesheet == null)
             {
                 return this.NotFound();
             }
 
-            return this.Ok(payment);
+            return this.Ok(timesheet);
         }
+        
+        [HttpGet]
+        [ProducesResponseType(typeof(Appointment), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllAsync([FromQuery] TimesheetFilter filter)
+        {
+            var result = await this.timesheetService.GetAllAsync(filter);
+            
+            if (result == null)
+            {
+                return this.NotFound();
+            }
 
-        /// <summary>
-        /// POST Timesheet
-        /// </summary>
-        /// <param name="request">Timesheet Request</param>
-        /// <returns></returns>
+            return this.Ok(result);
+        }
+        
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]

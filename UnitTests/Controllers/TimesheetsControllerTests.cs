@@ -1,4 +1,4 @@
-namespace UnitTests
+namespace UnitTests.Controllers
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -16,6 +16,7 @@ namespace UnitTests
     public class TimesheetsControllerTests
     {
         private readonly Fixture fixture;
+
         private readonly Mock<ITimesheetService> timesheetServiceMock;
 
         private readonly TimesheetsController timesheetsController;
@@ -47,7 +48,7 @@ namespace UnitTests
         {
             // Arrange
             var id = this.fixture.Create<Guid>();
-            
+
             // Act
             var result = await this.timesheetsController.GetAsync(id);
 
@@ -60,9 +61,9 @@ namespace UnitTests
         {
             // Arrange
             var timesheet = this.fixture.Create<Timesheet>();
-            
+
             this.timesheetServiceMock.Setup(s => s.PostAsync(timesheet)).ReturnsAsync(timesheet);
-            
+
             // Act
             var result = await this.timesheetsController.PostAsync(timesheet);
 
@@ -80,7 +81,7 @@ namespace UnitTests
 
             // Act
             await this.timesheetsController.PostAsync(timesheet);
-            
+
             // Assert
             this.timesheetServiceMock.Verify(v => v.PostAsync(timesheet), Times.Once);
         }
@@ -89,15 +90,15 @@ namespace UnitTests
         public async Task PostAsync_WithInvalidParameters_ShouldReturnBadRequest()
         {
             // Arrange
-            var timesheet = this.fixture.Build<Timesheet>().With(w=>w.UserName, String.Empty).Create();
-            
+            var timesheet = this.fixture.Build<Timesheet>().With(w => w.UserName, string.Empty).Create();
+
             // Act
             var result = await this.timesheetsController.PostAsync(timesheet);
 
             // Assert
             result.Should().BeOfType<BadRequestObjectResult>();
-            
-            //"Invalid UserName"
+            var badRequest = result as BadRequestObjectResult;
+            badRequest?.Value.ToString().Should().Be("Invalid UserName");
         }
     }
 }

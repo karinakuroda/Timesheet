@@ -1,5 +1,6 @@
 namespace UnitTests
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using AutoFixture;
     using FluentAssertions;
@@ -44,5 +45,18 @@ namespace UnitTests
             this.appointmentValidator.ErrorList.Should().HaveCount(1).And.Contain("Invalid Project Id");
         }
 
+        [Fact]
+        public void IsValid_WithEmptyDates_ShouldReturnFalse()
+        {
+            // Arrange
+            var appointmentDto = this.fixture.Build<AppointmentDTO>().Without(w => w.Start).Without(w => w.End).Create();
+            
+            // Act;
+            var result = this.appointmentValidator.IsValid(appointmentDto);
+
+            // Assert
+            result.Should().BeFalse();
+            this.appointmentValidator.ErrorList.Should().HaveCount(1).And.Contain("Invalid Dates");
+        }
     }
 }

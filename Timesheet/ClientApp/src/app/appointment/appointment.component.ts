@@ -11,13 +11,13 @@ import { AppointmentService } from './appointment.service';
 export class AppointmentComponent implements OnInit {
   public appointmentForm;
   public appointmentStartForm;
-  public timesheetId = "2067df1b-b937-4a8f-97af-08d7d1d8e7fb";
+  public timesheetId;
   public appointments: Appointment[] = [];
   public hasOpenAppointment: boolean;
   public elapsedTime: string;
   private openedAppointment;
-  private minDate = "0001-01-01T00:00:00";
   private timer;
+  private dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
 
   constructor(private formBuilder: FormBuilder, private appointmentService: AppointmentService) {
     this.appointmentStartForm = this.formBuilder.group({
@@ -36,29 +36,35 @@ export class AppointmentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.refreshList();
+    this.appointmentService.getTimesheetByUser("karina.kuroda").subscribe(result => {
+      this.timesheetId = result[0].id;
+      this.refreshList();
+      },
+      error => this.treatError(error));
   }
 
   refreshList() {
     this.appointmentService.getAll(this.timesheetId).subscribe(result => {
-      this.appointments = result;
-      this.configureOpenedAppointment();
-      
-    }, error => console.error(error));
+        this.appointments = result;
+        this.configureOpenedAppointment();
+
+      },
+      error => this.treatError(error));
   }
 
   add(data) {
     this.appointmentService.post(this.timesheetId, data).subscribe(result => {
-      this.refreshList();
-      this.appointmentForm.reset();
-    }, error => console.error(error));
+        this.refreshList();
+        this.appointmentForm.reset();
+      },
+      error => this.treatError(error));
   }
-
+  
   update(data: Appointment) {
     this.appointmentService.put(this.timesheetId, data.id, data).subscribe(result => {
       this.refreshList();
       this.appointmentForm.reset();
-    }, error => console.error(error));
+    }, error => this.treatError(error));
   }
 
   deleteAppointment(id) {
@@ -68,7 +74,7 @@ export class AppointmentComponent implements OnInit {
   }
 
   startAppointment(data) {
-    let dateNow = formatDate(Date.now(), "MM/dd/yyyy HH:mm", "en-US");
+    let dateNow = formatDate(Date.now(), this.dateTimeFormat, "en-US");
 
     let startAppointment: Appointment = <Appointment>{
       timesheetId: this.timesheetId,
@@ -80,33 +86,14 @@ export class AppointmentComponent implements OnInit {
     this.add(startAppointment);
   }
 
-  private configureOpenedAppointment() {
-    this.hasOpenAppointment = this.appointments.filter(element => element.end === this.minDate).length > 0;
-    if (this.hasOpenAppointment) {
-      this.openedAppointment = this.appointments.filter(element => element.end === this.minDate)[0];
-      this.configureTimer(this.openedAppointment.start);
-    }
-  }
-
-  private configureTimer(startedDate:string) {
-     this.timer = setInterval(() => {
-      
-      var eventStartTime = new Date(startedDate);
-      var eventEndTime = new Date();
-      var duration = eventEndTime.valueOf() - eventStartTime.valueOf();
-      this.elapsedTime = formatDate(new Date(0, 0, 0, 0, 0, 0, duration), "HH:mm:ss", "en-US");
-      
-    }, 1000);
-  }
-
   stopAppointment() {
-    let dateNow = formatDate(Date.now(), "MM/dd/yyyy HH:mm", "en-US");
-    var lastAppointment = this.appointments.filter(element => element.end === this.minDate);
+    let dateNow = formatDate(Date.now(),this.dateTimeFormat, "en-US");
+    let lastAppointment = this.appointments.filter(element => element.end === null);
     this.appointmentService.patchStopAppointment(this.timesheetId, lastAppointment[0].id, dateNow).subscribe(result => {
       this.refreshList();
       this.appointmentForm.reset();
       clearInterval(this.timer);
-    }, error => console.error(error));
+    }, error => this.treatError(error));
   }
 
   onNewAppointment() {
@@ -114,8 +101,8 @@ export class AppointmentComponent implements OnInit {
   }
 
   onEditAppointment(data: Appointment) {
-    let dateStart = formatDate(data.start, "MM/dd/yyyy HH:mm", "en-US");
-    let dateEnd = formatDate(data.end, "MM/dd/yyyy HH:mm", "en-US");
+    let dateStart = formatDate(data.start, this.dateTimeFormat, "en-US");
+    let dateEnd = formatDate(data.end, this.dateTimeFormat, "en-US");
 
     this.appointmentForm = this.formBuilder.group({
       id: data.id,
@@ -127,5 +114,32 @@ export class AppointmentComponent implements OnInit {
     });
   }
 
+  private configureOpenedAppointment() {
+    this.hasOpenAppointment = this.appointments.filter(element => element.end === null).length > 0;
 
+    if (this.hasOpenAppointment) {
+      this.openedAppointment = this.appointments.filter(element => element.end === null)[0];
+      this.configureTimer(this.openedAppointment.start);
+    }
+  }
+
+  private configureTimer(startedDate:string) {
+     this.timer = setInterval(() => {
+      
+      let eventStartTime = new Date(startedDate);
+      let eventEndTime = new Date();
+      let duration = eventEndTime.valueOf() - eventStartTime.valueOf();
+      this.elapsedTime = formatDate(new Date(0, 0, 0, 0, 0, 0, duration), "HH:mm:ss", "en-US");
+      
+    }, 1000);
+  }
+
+  private treatError(err) {
+    console.error(err.error);
+    if (err.error.length > 0) {
+      alert(err.error[0]);
+    } else if (err.error.error.length > 0) {
+      alert(err.error.error);
+    }
+  }
 }

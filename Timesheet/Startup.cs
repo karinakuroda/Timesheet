@@ -15,6 +15,7 @@ namespace Timesheet
     using Timesheet.ApplicationServices.Interfaces;
     using Timesheet.Data;
     using Timesheet.Domain.Builders;
+    using Timesheet.Middlewares;
 
     public class Startup
     {
@@ -79,7 +80,9 @@ namespace Timesheet
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
             app.UseMvc();
+            
             //app.UseMvc(routes =>
             //{
             //    routes.MapRoute(

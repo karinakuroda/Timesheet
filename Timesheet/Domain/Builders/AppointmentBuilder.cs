@@ -29,9 +29,13 @@
             return this;
         }
 
-        public AppointmentBuilder SetEnd(DateTime dateTime)
+        public AppointmentBuilder SetEnd(DateTime? dateTime)
         {
-            this.appointment.End = dateTime;
+            if (dateTime.HasValue)
+            {
+                this.appointment.End = dateTime;
+            }
+
             return this;
         }
 
@@ -49,6 +53,8 @@
 
         public Appointment Build()
         {
+            this.appointment.Validate();
+
             return this.appointment;
         }
     }

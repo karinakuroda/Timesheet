@@ -14,7 +14,7 @@
 
         AppointmentBuilder SetStart(DateTime dateTime);
 
-        AppointmentBuilder SetEnd(DateTime dateTime);
+        AppointmentBuilder SetEnd(DateTime? dateTime);
 
         Appointment Build();
     }

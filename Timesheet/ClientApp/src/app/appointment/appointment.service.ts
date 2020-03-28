@@ -11,6 +11,10 @@ export class AppointmentService {
 
   }
 
+  public getTimesheetByUser(username: string): Observable<any> {
+    return this.http.get<any[]>(this.baseUrl + 'api/timesheets?username=' + username);
+  }
+
   public getAll(timesheetId: string): Observable<any> {
     return this.http.get<any[]>(this.getUrl(timesheetId));
   }
@@ -36,7 +40,7 @@ export class AppointmentService {
   }
 
   private getUrl(timesheetId: string, id?: string): string {
-    let url = this.baseUrl + '/timesheets/' + timesheetId + '/appointments';
+    let url = this.baseUrl + 'api/timesheets/' + timesheetId + '/appointments';
 
     if (id != null) {
       url += '/' + id;

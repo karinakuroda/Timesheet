@@ -1,4 +1,4 @@
-namespace UnitTests
+namespace UnitTests.Controllers
 {
     using System;
     using System.Diagnostics.CodeAnalysis;

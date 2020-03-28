@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Timesheet.Data;
 
 namespace Timesheet.Data.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    partial class TimesheetContextModelSnapshot : ModelSnapshot
+    [Migration("20200328163854_fixAppointmentEnd")]
+    partial class fixAppointmentEnd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,13 +83,6 @@ namespace Timesheet.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Timesheets");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("0dbce2c5-daad-475b-aec7-406987548287"),
-                            UserName = "karina.kuroda"
-                        });
                 });
 
             modelBuilder.Entity("Timesheet.Domain.Appointment", b =>

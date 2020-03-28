@@ -1,7 +1,9 @@
 ﻿namespace Timesheet.ApplicationServices
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Timesheet.ApplicationServices.DTO;
     using Timesheet.ApplicationServices.Interfaces;
     using Timesheet.Data;
     using Timesheet.Domain;
@@ -23,6 +25,11 @@
         public Task<Timesheet> GetAsync(Guid id)
         {
             return this.timesheetRepository.GetAsync(id);
+        }
+
+        public Task<List<Timesheet>> GetAllAsync(TimesheetFilter filter)
+        {
+            return this.timesheetRepository.GetAllAsync(filter);
         }
     }
 }

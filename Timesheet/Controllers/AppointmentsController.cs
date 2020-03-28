@@ -10,6 +10,7 @@ namespace Timesheet.Controllers
     using Timesheet.ApplicationServices.Interfaces;
     using Timesheet.Domain;
 
+    [Route("api")]
     public class AppointmentsController : Controller
     {
         private readonly IAppointmentService appointmentService;

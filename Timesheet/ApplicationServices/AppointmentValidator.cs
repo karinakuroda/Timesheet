@@ -8,7 +8,7 @@
     public class AppointmentValidator : IAppointmentValidator
     {
         private AppointmentDTO appointmentDto;
-        
+
         public AppointmentValidator()
         {
             this.ErrorList = new List<string>();
@@ -47,44 +47,21 @@
 
         private bool HasValidDates()
         {
-            //if (this.IsNull() || 
-            //    this.StartBiggerThanEnd() ||
-            //    this.DatesBiggerThanNow())
-            //{
-            //    this.ErrorList.Add("Invalid Date");
-            //    return false;
-            //}
+            var startIsValid = this.appointmentDto.Start != default(DateTime);
 
-            return true;
-        }
-
-        private bool StartBiggerThanEnd()
-        {
-            if (this.appointmentDto.Start > this.appointmentDto.End)
+            if (!this.appointmentDto.End.HasValue && startIsValid)
             {
                 return true;
             }
 
-            return false;
-        }
+            var endIsValid = this.appointmentDto.End != default(DateTime);
 
-        private bool DatesBiggerThanNow()
-        {
-            if (this.appointmentDto.Start > DateTime.Now || this.appointmentDto.End > DateTime.Now)
+            if (startIsValid && endIsValid)
             {
                 return true;
             }
 
-            return false;
-        }
-
-        private bool IsNull()
-        {
-            if (this.appointmentDto.End == default(DateTime) || this.appointmentDto.Start == default(DateTime))
-            {
-                return true;
-            }
-
+            this.ErrorList.Add("Invalid Dates");
             return false;
         }
     }

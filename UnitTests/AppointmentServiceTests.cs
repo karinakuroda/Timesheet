@@ -37,7 +37,7 @@ namespace UnitTests
         {
             // Arrange
             var timesheetId = this.fixture.Create<Guid>();
-            var appointmentDto = this.fixture.Create<AppointmentDTO>();
+            var appointmentDto = this.fixture.Build<AppointmentDTO>().With(w => w.Start, DateTime.Now).Without(w => w.End).Create();
             var appointment = this.fixture.Create<Appointment>();
 
             this.appointmentRepositoryMock.Setup(s => s.PostAsync(It.IsAny<Appointment>())).ReturnsAsync(appointment);
@@ -73,7 +73,7 @@ namespace UnitTests
         {
             // Arrange
             var timesheetId = this.fixture.Create<Guid>();
-            var appointmentDto = this.fixture.Create<AppointmentDTO>();
+            var appointmentDto = this.fixture.Build<AppointmentDTO>().With(w => w.Start, DateTime.Now).Without(w => w.End).Create();
             var appointment = this.fixture.Create<Appointment>();
 
             this.appointmentRepositoryMock.Setup(s => s.PostAsync(It.IsAny<Appointment>())).ReturnsAsync(appointment);
