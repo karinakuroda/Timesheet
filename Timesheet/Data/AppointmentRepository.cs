@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using Timesheet.ApplicationServices.DTO;
     using Timesheet.Domain;
 
     public class AppointmentRepository : IAppointmentRepository
@@ -28,9 +29,12 @@
             return this.context.Appointments.Where(w => w.TimesheetId == timesheetId && w.Id == id).SingleOrDefaultAsync();
         }
 
-        public Task<List<Appointment>> GetAllAsync(Guid timesheetId)
+        public Task<List<Appointment>> GetAllAsync(Guid timesheetId, AppointmentFilterDTO filterDto)
         {
-            return this.context.Appointments.Include(i => i.Project).Where(w => w.TimesheetId == timesheetId)
+            return this.context.Appointments.Include(i => i.Project)
+                .Where(w => w.TimesheetId == timesheetId || timesheetId == default(Guid))
+                .Where(w => w.ProjectId == filterDto.ProjectId || filterDto.ProjectId == default(int))
+                .Where(w => w.Description == filterDto.Description || filterDto.Description == default(string))
                 .OrderByDescending(o => o.Start).ToListAsync();
         }
 

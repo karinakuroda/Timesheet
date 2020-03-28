@@ -1,6 +1,6 @@
 ﻿namespace Timesheet.ApplicationServices.DTO
 {
-    public class TimesheetFilter
+    public class TimesheetFilterDTO
     {
         public string Username { get; set; }
     }

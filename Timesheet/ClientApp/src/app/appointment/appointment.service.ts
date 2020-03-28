@@ -15,11 +15,17 @@ export class AppointmentService {
     return this.http.get<any[]>(this.baseUrl + 'api/timesheets?username=' + username);
   }
 
-  public getAll(timesheetId: string): Observable<any> {
-    return this.http.get<any[]>(this.getUrl(timesheetId));
+  public getAll(timesheetId: string, projectId?: number): Observable<any> {
+    let url = this.getUrl(timesheetId);
+
+    if (projectId != null) {
+      url += '?projectId=' + projectId;
+    }
+
+    return this.http.get<any[]>(url);
   }
 
-  public patchStopAppointment(timesheetId: string, id:string, dateTimeEnd:string): Observable<any> {
+  public patchStopAppointment(timesheetId: string, id: string, dateTimeEnd: string): Observable<any> {
     let patchData: any[] = [];
 
     patchData.push(this.createDataToModify(dateTimeEnd, 'end'));

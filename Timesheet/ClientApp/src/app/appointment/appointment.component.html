@@ -124,12 +124,19 @@
 </div>
 
 <!-- List -->
+<label for="projectSelect">Filter By Project</label>
+<select id="projectSelect" class="form-control" [(ngModel)]="projectIdSelected" (change)="setProjectId($event.target.value)">
+  <option selected>Choose...</option>
+  <option value="1">Timesheet</option>
+  <option value="2">DirReduce</option>
+</select>
+
 <div class="container">
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">#</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
         <th scope="col">Start Date</th>
         <th scope="col">End Date</th>
         <th scope="col">Project</th>

@@ -40,9 +40,9 @@
             return this.appointmentRepository.GetByIdAsync(timesheetId, id);
         }
 
-        public Task<List<Appointment>> GetAllAsync(Guid timesheetId)
+        public Task<List<Appointment>> GetAllAsync(Guid timesheetId, AppointmentFilterDTO filterDto)
         {
-            return this.appointmentRepository.GetAllAsync(timesheetId);
+            return this.appointmentRepository.GetAllAsync(timesheetId, filterDto);
         }
 
         public Task DeleteAsync(Guid timesheetId, Guid id)

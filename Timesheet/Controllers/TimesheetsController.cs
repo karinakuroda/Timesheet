@@ -39,9 +39,9 @@ namespace Timesheet.Controllers
         [ProducesResponseType(typeof(Appointment), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllAsync([FromQuery] TimesheetFilter filter)
+        public async Task<IActionResult> GetAllAsync([FromQuery] TimesheetFilterDTO filterDto)
         {
-            var result = await this.timesheetService.GetAllAsync(filter);
+            var result = await this.timesheetService.GetAllAsync(filterDto);
             
             if (result == null)
             {

@@ -27,9 +27,9 @@
             return this.timesheetRepository.GetAsync(id);
         }
 
-        public Task<List<Timesheet>> GetAllAsync(TimesheetFilter filter)
+        public Task<List<Timesheet>> GetAllAsync(TimesheetFilterDTO filterDto)
         {
-            return this.timesheetRepository.GetAllAsync(filter);
+            return this.timesheetRepository.GetAllAsync(filterDto);
         }
     }
 }

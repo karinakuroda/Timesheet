@@ -39,6 +39,8 @@ namespace Timesheet
 
             var connection = ConfigurationExtensions.GetConnectionString(this.Configuration, "DefaultConnection");
             services.AddDbContext<TimesheetContext>(options => options.UseSqlServer(connection));
+            var context = services.BuildServiceProvider().GetRequiredService<TimesheetContext>();
+            context.Database.Migrate();
 
             services.AddSwaggerGen(c =>
             {

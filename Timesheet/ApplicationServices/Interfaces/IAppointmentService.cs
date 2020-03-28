@@ -13,7 +13,7 @@
 
         Task<Appointment> GetByIdAsync(Guid timesheetId, Guid id);
 
-        Task<List<Appointment>> GetAllAsync(Guid timesheetId);
+        Task<List<Appointment>> GetAllAsync(Guid timesheetId, AppointmentFilterDTO filterDto);
 
         Task DeleteAsync(Guid timesheetId, Guid id);
 

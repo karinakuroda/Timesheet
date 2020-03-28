@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Timesheet.ApplicationServices.DTO;
     using Timesheet.Domain;
 
     public interface IAppointmentRepository
@@ -11,7 +12,7 @@
 
         Task<Appointment> GetByIdAsync(Guid timesheetId, Guid id);
 
-        Task<List<Appointment>> GetAllAsync(Guid timesheetId);
+        Task<List<Appointment>> GetAllAsync(Guid timesheetId, AppointmentFilterDTO filterDto);
 
         Task DeleteAsync(Guid timesheetId, Guid id);
 

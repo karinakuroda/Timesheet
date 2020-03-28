@@ -12,12 +12,14 @@ export class AppointmentComponent implements OnInit {
   public appointmentForm;
   public appointmentStartForm;
   public timesheetId;
+  public projectIdSelected:number;
   public appointments: Appointment[] = [];
   public hasOpenAppointment: boolean;
   public elapsedTime: string;
   private openedAppointment;
   private timer;
   private dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
+  private dateTimeFormatWithoutSeconds = "MM/dd/yyyy HH:mm";
 
   constructor(private formBuilder: FormBuilder, private appointmentService: AppointmentService) {
     this.appointmentStartForm = this.formBuilder.group({
@@ -42,9 +44,12 @@ export class AppointmentComponent implements OnInit {
       },
       error => this.treatError(error));
   }
-
+  setProjectId(value) {
+    this.projectIdSelected = value;
+    this.refreshList();
+  }
   refreshList() {
-    this.appointmentService.getAll(this.timesheetId).subscribe(result => {
+    this.appointmentService.getAll(this.timesheetId, this.projectIdSelected).subscribe(result => {
         this.appointments = result;
         this.configureOpenedAppointment();
 
@@ -101,8 +106,8 @@ export class AppointmentComponent implements OnInit {
   }
 
   onEditAppointment(data: Appointment) {
-    let dateStart = formatDate(data.start, this.dateTimeFormat, "en-US");
-    let dateEnd = formatDate(data.end, this.dateTimeFormat, "en-US");
+    let dateStart = formatDate(data.start, this.dateTimeFormatWithoutSeconds, "en-US");
+    let dateEnd = formatDate(data.end, this.dateTimeFormatWithoutSeconds, "en-US");
 
     this.appointmentForm = this.formBuilder.group({
       id: data.id,

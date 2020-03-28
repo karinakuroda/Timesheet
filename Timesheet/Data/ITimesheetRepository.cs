@@ -12,6 +12,6 @@
 
         Task<Timesheet> GetAsync(Guid id);
 
-        Task<List<Timesheet>> GetAllAsync(TimesheetFilter filter);
+        Task<List<Timesheet>> GetAllAsync(TimesheetFilterDTO filterDto);
     }
 }

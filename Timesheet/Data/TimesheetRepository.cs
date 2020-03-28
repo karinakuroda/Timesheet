@@ -29,10 +29,10 @@
             return this.context.Timesheets.FindAsync(id);
         }
 
-        public Task<List<Timesheet>> GetAllAsync(TimesheetFilter filter)
+        public Task<List<Timesheet>> GetAllAsync(TimesheetFilterDTO filterDto)
         {
             return this.context.Timesheets
-                .Where(a => a.UserName == filter.Username || string.IsNullOrWhiteSpace(filter.Username))
+                .Where(a => a.UserName == filterDto.Username || string.IsNullOrWhiteSpace(filterDto.Username))
                 .ToListAsync();
         }
     }
