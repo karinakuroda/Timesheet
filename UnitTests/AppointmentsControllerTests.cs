@@ -1,6 +1,7 @@
 namespace UnitTests
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using AutoFixture;
     using FluentAssertions;
@@ -12,6 +13,7 @@ namespace UnitTests
     using Timesheet.Domain;
     using Xunit;
 
+    [ExcludeFromCodeCoverage]
     public class AppointmentsControllerTests
     {
         private readonly Fixture fixture;
@@ -95,7 +97,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public async Task PostAsync_WithValidParameters_ShouldReturnBadRequest()
+        public async Task PostAsync_WithInvalidParameters_ShouldReturnBadRequest()
         {
             // Arrange
             var timesheetId = this.fixture.Create<Guid>();

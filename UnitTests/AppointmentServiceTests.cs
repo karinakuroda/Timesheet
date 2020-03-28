@@ -1,8 +1,10 @@
 namespace UnitTests
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using AutoFixture;
+    using FluentAssertions;
     using Microsoft.AspNetCore.JsonPatch;
     using Moq;
     using Timesheet.ApplicationServices;
@@ -12,6 +14,7 @@ namespace UnitTests
     using Timesheet.Domain.Builders;
     using Xunit;
 
+    [ExcludeFromCodeCoverage]
     public class AppointmentServiceTests
     {
         private readonly Fixture fixture;
@@ -52,7 +55,6 @@ namespace UnitTests
             // Arrange
             var timesheetId = this.fixture.Create<Guid>();
             var id = this.fixture.Create<Guid>();
-            var appointmentDto = this.fixture.Create<AppointmentDTO>();
             var appointment = this.fixture.Create<Appointment>();
             var doc = new JsonPatchDocument<Appointment>();
 
@@ -80,7 +82,7 @@ namespace UnitTests
             var result = await this.appointmentService.PostAsync(timesheetId, appointmentDto);
 
             // Assert
-            Assert.Equal(appointment, result);
+            result.Should().BeEquivalentTo(appointment);
         }
 
     }

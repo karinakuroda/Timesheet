@@ -1,18 +1,13 @@
 namespace UnitTests
 {
-    using System;
-    using System.Threading.Tasks;
+    using System.Diagnostics.CodeAnalysis;
     using AutoFixture;
     using FluentAssertions;
-    using Microsoft.AspNetCore.JsonPatch;
-    using Moq;
     using Timesheet.ApplicationServices;
     using Timesheet.ApplicationServices.DTO;
-    using Timesheet.Data;
-    using Timesheet.Domain;
-    using Timesheet.Domain.Builders;
     using Xunit;
 
+    [ExcludeFromCodeCoverage]
     public class AppointmentValidatorTests
     {
         private readonly Fixture fixture;
@@ -29,9 +24,9 @@ namespace UnitTests
         {
             // Act;
             var result = this.appointmentValidator.IsValid(null);
-            
+
             // Assert
-            Assert.False(result);
+            result.Should().BeFalse();
             this.appointmentValidator.ErrorList.Should().HaveCount(1).And.Contain("Invalid Appointment");
         }
 
@@ -45,7 +40,7 @@ namespace UnitTests
             var result = this.appointmentValidator.IsValid(appointmentDto);
 
             // Assert
-            Assert.False(result);
+            result.Should().BeFalse();
             this.appointmentValidator.ErrorList.Should().HaveCount(1).And.Contain("Invalid Project Id");
         }
 

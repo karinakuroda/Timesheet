@@ -6,7 +6,7 @@
 
     public interface ITimesheetRepository
     {
-        Task<Timesheet> ProcessAsync(Timesheet timesheet);
+        Task<Timesheet> PostAsync(Timesheet timesheet);
 
         Task<Timesheet> GetAsync(Guid id);
     }

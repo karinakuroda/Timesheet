@@ -15,9 +15,9 @@
             this.timesheetRepository = timesheetRepository;
         }
 
-        public Task<Timesheet> ProcessAsync(Timesheet timesheet)
+        public Task<Timesheet> PostAsync(Timesheet timesheet)
         {
-            return this.timesheetRepository.ProcessAsync(timesheet);
+            return this.timesheetRepository.PostAsync(timesheet);
         }
 
         public Task<Timesheet> GetAsync(Guid id)

@@ -51,7 +51,12 @@ namespace Timesheet.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostAsync([FromBody] Timesheet request)
         {
-            var result = await this.timesheetService.ProcessAsync(request);
+            if (string.IsNullOrWhiteSpace(request.UserName))
+            {
+                return this.BadRequest("Invalid UserName");
+            }
+
+            var result = await this.timesheetService.PostAsync(request);
 
             return this.CreatedAtAction(nameof(this.GetAsync), new { id = result.Id }, result.Id);
         }

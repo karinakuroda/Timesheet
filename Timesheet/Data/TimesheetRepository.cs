@@ -13,7 +13,7 @@
             this.context = context;
         }
 
-        public async Task<Timesheet> ProcessAsync(Timesheet timesheet)
+        public async Task<Timesheet> PostAsync(Timesheet timesheet)
         {
             this.context.Add(timesheet);
             await this.context.SaveChangesAsync();
