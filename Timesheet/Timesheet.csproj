@@ -11,6 +11,8 @@
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
     <UserSecretsId>44525c83-cab6-489c-a2d3-7a293148c30a</UserSecretsId>
+    <DockerfileFile>..\..\Timesheet\Dockerfile</DockerfileFile>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,15 +20,20 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.10" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.2.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
-    <Content Remove="$(SpaRoot)**" />
-    <None Remove="$(SpaRoot)**" />
+    <!--<Content Remove="$(SpaRoot)**" />
+    <None Remove="$(SpaRoot)**" />-->
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\empty.ts" />
   </ItemGroup>
 
   <ItemGroup>

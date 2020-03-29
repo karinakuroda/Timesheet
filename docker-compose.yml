@@ -2,6 +2,8 @@ version: "3"
 services:
     web:
         build: .
+        environment:
+            - "TZ=Europe/Lisbon"
         ports:
             - "8001:80"
         depends_on:

@@ -20,22 +20,26 @@ COPY ["Timesheet/Timesheet.csproj", "Timesheet/"]
 RUN dotnet restore "Timesheet/Timesheet.csproj"
 COPY . .
 WORKDIR "/src/Timesheet"
-RUN dotnet build "Timesheet.csproj" -c Release -o /app/build
+RUN dotnet build "Timesheet.csproj" -c Debug -o /app/build
 
 RUN echo $(ls -1 /src/Timesheet)
 
 WORKDIR "/src/Timesheet"
 FROM build AS publish
-RUN dotnet publish "Timesheet.csproj" -c Release -o /app/publish
+RUN dotnet publish "Timesheet.csproj" -c Debug -o /app/publish
 
 FROM node
-COPY "Timesheet/ClientApp/*" "ClientApp/"
+# COPY "Timesheet/ClientApp/*" "ClientApp/"
 WORKDIR "/src/Timesheet/ClientApp"
+# COPY . .
 RUN echo $(ls -1 /src/Timesheet/ClientApp)
 RUN npm install --unsafe-perm node-sass \
+    npm install -g @angular/cli \
+    npm run ng build --output-path=dist \
     npm start
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "Timesheet.dll"]

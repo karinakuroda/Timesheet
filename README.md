@@ -29,3 +29,15 @@ so that I can create correct invoices for my customers
 ```
 At appointments page you can use the filters to get the list of registrations and get a full overview of your projects
 
+## To get started with docker:
+
+### PRE REQ:
+- Docker
+- nodeJS
+
+```
+npm install
+npm run build
+docker-compose build --no-cache
+docker-compose up
+```
