@@ -33,11 +33,28 @@ At appointments page you can use the filters to get the list of registrations an
 
 ### PRE REQ:
 - Docker
-- nodeJS
+- NodeJS
 
+At `Timesheet/Timesheet/ClientApp` folder, run the following commands:
 ```
 npm install
 npm run build
+```
+
+At `Timesheet` folder:
+```
 docker-compose build --no-cache
 docker-compose up
 ```
+You can access the app with the following url:
+http://localhost:8001/
+
+## To get started without docker:
+
+### PRE REQ:
+- Sql Server (Remember to adjust the connection string)
+- NodeJS
+- .Net Core 2.2
+
+*You can use VS integration to get this app up, otherwise, use the angular-cli with net core cli commands.
+ 
