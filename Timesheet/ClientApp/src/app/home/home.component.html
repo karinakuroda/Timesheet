@@ -1,22 +1,19 @@
-
 <div class="jumbotron">
-  <h1>Hello! :)</h1>
+  <h1>Hello, welcome! :)</h1>
   <p class="lead">This is a timesheet project sample, built with:</p>
   <ul class="lead">
     <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
     <li><a href='https://angular.io/'>Angular</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
+    <li>3rd party libraries, such as <a href="https://momentjs.com/">Moment.js</a> and <a href="https://www.primefaces.org/primeng/showcase/#/setup">PrimeNg</a></li>
     <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
     <li><a href='https://docs.microsoft.com/en-us/ef/core/'>SQL Server with EF Core</a> for database (O/RM)</li>
-    <li><a href='https://docs.microsoft.com/en-us/ef/core/'>XUnit/FluentAssertions/Moq/Fixture</a> for unit tests</li>
+    <li>XUnit/FluentAssertions/Moq/Fixture for unit tests</li>
   </ul>
 </div>
-
-
 <div class="lead">
-  
   This project was build to solves the following two user stories:
-  <br/>
-
+  <br />
+  <br />
   <div class="card">
     <div class="card-header">
       Story 1
@@ -28,13 +25,11 @@
           I want to be able to register the time I spend on my projects<br />
           so that I can create correct invoices for my customers<br />
         </p>
-        <footer class="blockquote-footer">So, now you can register the time spend on your projects</footer>
+        <footer class="blockquote-footer">So, at appointments page, you can register the time spent on your projects</footer>
       </blockquote>
     </div>
   </div>
-
   <hr class="my-4">
-
   <div class="card">
     <div class="card-header">
       Story 2
@@ -46,11 +41,66 @@
           I want to be able to get an overview of my time registrations<br />
           so that I can create correct invoices for my customers<br />
         </p>
-        <footer class="blockquote-footer">At appointments tab you can filter the list of registrations and get a full overview of your projects</footer>
+        <footer class="blockquote-footer">At appointments page, you can use the filters to get the list of registrations and get a full overview of your projects</footer>
       </blockquote>
     </div>
   </div>
 </div>
-
 <hr class="my-4">
-
+<div class="lead">
+  <h2>To go further!</h2>
+  <br />
+  This is a <strong>TO DO</strong> suggestion list to improve this project:
+  <ul class="lead">
+    BackEnd:
+    <li>
+      Separate folders into project layers. Ex:
+      <ul>
+        <li>
+          API
+        </li>
+        <li>
+          Application
+          <ul>
+            <li>
+              Application.DTO
+            </li>
+            <li>
+              Application.Service
+            </li>
+          </ul>
+        </li>
+        <li>
+          Domain
+        </li>
+        <li>
+          Data
+          <ul>
+            <li>
+              Repository
+            </li>
+          </ul>
+        </li>
+        <li>
+          Infrastructure
+        </li>
+      </ul>
+    </li>
+    <li>Increase code coverage with more unit tests</li>
+    <li>Add a new endpoint for report purposes</li>
+    <li>Add authentication and authorization</li>
+    <li>Add logs</li>
+    <li>Add tracing</li>
+    <li>CI/CD</li>
+  </ul>
+  <ul class="lead">
+    Front end:
+    <li>Separate code into multiples reusable components</li>
+    <li>Add a data grid for appointments list with sorting, paging and user interaction, such as <a href="http://ui-grid.info/">ui-grid</a></li>
+    <li>Build Reports using charts such as<a href="https://www.chartjs.org/">chartjs</a></li>
+  </ul>
+  <p class="lead">
+    There is so many  
+    You can <strong>clone</strong> the repository <a href='https://github.com/karinakuroda/Timesheet'>here</a>
+  </p>
+</div>
