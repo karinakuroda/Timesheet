@@ -17,7 +17,7 @@
             this.context = context;
         }
 
-        public async Task<Appointment> PostAsync(Appointment appointment)
+        public async Task<Appointment> AddAsync(Appointment appointment)
         {
             this.context.Add(appointment);
             await this.context.SaveChangesAsync();
@@ -47,7 +47,7 @@
             await this.context.SaveChangesAsync();
         }
 
-        public Task PatchAsync(Guid timesheetId, Guid id, Appointment appointment)
+        public Task PartialUpdateAsync(Guid timesheetId, Guid id, Appointment appointment)
         {
             this.context.Entry(appointment).State = EntityState.Modified;
             this.context.SaveChangesAsync();
@@ -55,7 +55,7 @@
             return Task.CompletedTask;
         }
 
-        public async Task PutAsync(Guid timesheetId, Guid id, Appointment appointment)
+        public async Task UpdateAsync(Guid timesheetId, Guid id, Appointment appointment)
         {
             var old = await this.GetByIdAsync(timesheetId, id);
             this.context.Entry(old).CurrentValues.SetValues(appointment);

@@ -40,13 +40,13 @@ namespace UnitTests
             var appointmentDto = this.fixture.Build<AppointmentDTO>().With(w => w.Start, DateTime.Now).Without(w => w.End).Create();
             var appointment = this.fixture.Create<Appointment>();
 
-            this.appointmentRepositoryMock.Setup(s => s.PostAsync(It.IsAny<Appointment>())).ReturnsAsync(appointment);
+            this.appointmentRepositoryMock.Setup(s => s.AddAsync(It.IsAny<Appointment>())).ReturnsAsync(appointment);
 
             // Act
             var result = await this.appointmentService.PostAsync(timesheetId, appointmentDto);
 
             // Assert
-            this.appointmentRepositoryMock.Verify(v => v.PostAsync(It.IsAny<Appointment>()), Times.Once);
+            this.appointmentRepositoryMock.Verify(v => v.AddAsync(It.IsAny<Appointment>()), Times.Once);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace UnitTests
             var doc = new JsonPatchDocument<Appointment>();
 
             this.appointmentRepositoryMock.Setup(s => s.GetByIdAsync(timesheetId, id)).ReturnsAsync(appointment).Verifiable();
-            this.appointmentRepositoryMock.Setup(s => s.PatchAsync(timesheetId, id, It.IsAny<Appointment>())).Verifiable();
+            this.appointmentRepositoryMock.Setup(s => s.PartialUpdateAsync(timesheetId, id, It.IsAny<Appointment>())).Verifiable();
 
             // Act
             await this.appointmentService.PatchAsync(timesheetId, id, doc);
@@ -76,7 +76,7 @@ namespace UnitTests
             var appointmentDto = this.fixture.Build<AppointmentDTO>().With(w => w.Start, DateTime.Now).Without(w => w.End).Create();
             var appointment = this.fixture.Create<Appointment>();
 
-            this.appointmentRepositoryMock.Setup(s => s.PostAsync(It.IsAny<Appointment>())).ReturnsAsync(appointment);
+            this.appointmentRepositoryMock.Setup(s => s.AddAsync(It.IsAny<Appointment>())).ReturnsAsync(appointment);
 
             // Act
             var result = await this.appointmentService.PostAsync(timesheetId, appointmentDto);

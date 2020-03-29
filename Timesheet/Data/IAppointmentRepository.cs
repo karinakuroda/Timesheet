@@ -8,7 +8,7 @@
 
     public interface IAppointmentRepository
     {
-        Task<Appointment> PostAsync(Appointment appointment);
+        Task<Appointment> AddAsync(Appointment appointment);
 
         Task<Appointment> GetByIdAsync(Guid timesheetId, Guid id);
 
@@ -16,8 +16,8 @@
 
         Task DeleteAsync(Guid timesheetId, Guid id);
 
-        Task PatchAsync(Guid timesheetId, Guid id, Appointment appointment);
+        Task PartialUpdateAsync(Guid timesheetId, Guid id, Appointment appointment);
 
-        Task PutAsync(Guid timesheetId, Guid id, Appointment appointment);
+        Task UpdateAsync(Guid timesheetId, Guid id, Appointment appointment);
     }
 }

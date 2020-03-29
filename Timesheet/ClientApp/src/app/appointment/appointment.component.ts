@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { formatDate } from "@angular/common";
 import { Appointment } from './appointment';
 import { AppointmentService } from './appointment.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-appointment-component',
@@ -18,8 +18,9 @@ export class AppointmentComponent implements OnInit {
   appointments: Appointment[] = [];
   hasOpenAppointment: boolean;
   elapsedTime: string;
+  totalSpentTime: string;
   private timer;
-  
+
   constructor(private formBuilder: FormBuilder, private appointmentService: AppointmentService) {
     this.appointmentStartForm = this.formBuilder.group({
       projectId: 0,
@@ -40,7 +41,7 @@ export class AppointmentComponent implements OnInit {
     this.appointmentService.getTimesheetByUser("karina.kuroda").subscribe(result => {
       this.timesheetId = result[0].id;
       this.refreshList();
-      },
+    },
       error => this.treatError(error));
   }
 
@@ -55,22 +56,24 @@ export class AppointmentComponent implements OnInit {
 
   refreshList() {
     this.appointmentService.getAll(this.timesheetId, this.projectIdSelected, this.startSelected, this.endSelected).subscribe(result => {
-        this.appointments = result;
-        this.configureOpenedAppointment();
-      },
+      this.appointments = result;
+      var timeReduced = result.map(f => f.timeSpent).reduce((acc, time) => acc.add(moment.duration(time)), moment.duration());
+      this.totalSpentTime = moment.utc(timeReduced.as('milliseconds')).format('HH:mm:ss');
+      this.configureOpenedAppointment();
+    },
       error => this.treatError(error));
   }
 
   add(data) {
-    this.appointmentService.post(this.timesheetId, data).subscribe(result => {
-        this.refreshList();
-        this.appointmentForm.reset();
-      },
+    this.appointmentService.post(this.timesheetId, data).subscribe(() => {
+      this.refreshList();
+      this.appointmentForm.reset();
+    },
       error => this.treatError(error));
   }
-  
+
   update(data: Appointment) {
-    this.appointmentService.put(this.timesheetId, data.id, data).subscribe(result => {
+    this.appointmentService.put(this.timesheetId, data.id, data).subscribe(() => {
       this.refreshList();
       this.appointmentForm.reset();
     }, error => this.treatError(error));
@@ -110,7 +113,7 @@ export class AppointmentComponent implements OnInit {
   onEditAppointment(data: Appointment) {
     let dateStart = this.appointmentService.getFormatedDateWithoutSeconds(data.start);
     let dateEnd = this.appointmentService.getFormatedDateWithoutSeconds(data.end);
-    
+
     this.appointmentForm = this.formBuilder.group({
       id: data.id,
       timesheetId: data.timesheetId,
@@ -130,12 +133,10 @@ export class AppointmentComponent implements OnInit {
     }
   }
 
-  private configureTimer(startedDate:string) {
-     this.timer = setInterval(() => {
-      let eventStartTime = new Date(startedDate);
-      let eventEndTime = new Date();
-      let duration = eventEndTime.valueOf() - eventStartTime.valueOf();
-      this.elapsedTime = formatDate(new Date(0, 0, 0, 0, 0, 0, duration), "HH:mm:ss", "en-US");
+  private configureTimer(startedDate: string) {
+    this.timer = setInterval(() => {
+      let duration = new Date().valueOf() - new Date(startedDate).valueOf();
+      this.elapsedTime = moment.utc(duration).format("HH:mm:ss");
     }, 1000);
   }
 

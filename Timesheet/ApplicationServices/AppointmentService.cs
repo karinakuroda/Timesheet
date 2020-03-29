@@ -32,7 +32,7 @@
                 .SetEnd(appointmentDTO.End)
                 .Build();
 
-            return this.appointmentRepository.PostAsync(appointment);
+            return this.appointmentRepository.AddAsync(appointment);
         }
 
         public Task<Appointment> GetByIdAsync(Guid timesheetId, Guid id)
@@ -55,7 +55,7 @@
             var appointment = await this.GetByIdAsync(timesheetId, id);
             patchDocument.ApplyTo(appointment);
 
-            await this.appointmentRepository.PatchAsync(timesheetId, id, appointment);
+            await this.appointmentRepository.PartialUpdateAsync(timesheetId, id, appointment);
         }
 
         public Task PutAsync(Guid timesheetId, Guid id, AppointmentDTO appointmentDto)
@@ -69,7 +69,7 @@
                 .SetEnd(appointmentDto.End)
                 .Build();
 
-            return this.appointmentRepository.PutAsync(timesheetId, id, appointment);
+            return this.appointmentRepository.UpdateAsync(timesheetId, id, appointment);
         }
     }
 }

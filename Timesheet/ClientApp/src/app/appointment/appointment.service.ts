@@ -9,24 +9,24 @@ import { formatDate } from "@angular/common";
 })
 export class AppointmentService {
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
-
   }
+
   private dateTimeFormatWithoutSeconds = "MM/dd/yyyy HH:mm";
   private dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
 
-  public getFormatedDate(date) {
+  getFormatedDate(date) {
     return formatDate(date, this.dateTimeFormat, "en-US");
   }
 
-  public getFormatedDateWithoutSeconds(date) {
+  getFormatedDateWithoutSeconds(date) {
     return formatDate(date, this.dateTimeFormatWithoutSeconds, "en-US");
   }
 
-  public getTimesheetByUser(username: string): Observable<any> {
+  getTimesheetByUser(username: string): Observable<any> {
     return this.http.get<any[]>(this.baseUrl + "api/timesheets?username=" + username);
   }
 
-  public getAll(timesheetId: string, projectId?: number, startSelected?, endSelected?): Observable<any> {
+  getAll(timesheetId: string, projectId?: number, startSelected?, endSelected?): Observable<any> {
     let url = this.getUrl(timesheetId)+'?';
 
     if (projectId != null) {
@@ -46,23 +46,23 @@ export class AppointmentService {
     return this.http.get<any[]>(url);
   }
 
-  public patchStopAppointment(timesheetId: string, id: string, dateTimeEnd: string): Observable<any> {
-    let patchData: any[] = [];
+  patchStopAppointment(timesheetId: string, id: string, dateTimeEnd: string): Observable<any> {
+    const patchData: any[] = [];
 
     patchData.push(this.createDataToModify(dateTimeEnd, "end"));
 
     return this.http.patch<any[]>(this.getUrl(timesheetId, id), patchData);
   }
 
-  public put(timesheetId: string, id: string, data): Observable<any> {
+  put(timesheetId: string, id: string, data): Observable<any> {
     return this.http.put<any[]>(this.getUrl(timesheetId, id), data);
   }
 
-  public post(timesheetId: string, data: any): Observable<any> {
+  post(timesheetId: string, data: any): Observable<any> {
     return this.http.post<any[]>(this.getUrl(timesheetId), data);
   }
 
-  public delete(timesheetId: string, id: string): Observable<any> {
+  delete(timesheetId: string, id: string): Observable<any> {
     return this.http.delete<any[]>(this.getUrl(timesheetId, id));
   }
 
@@ -77,7 +77,7 @@ export class AppointmentService {
   }
 
   private createDataToModify(value, path) {
-    let patchData = {
+    const patchData = {
       "value": value,
       "path": "/" + path,
       "op": "replace"
