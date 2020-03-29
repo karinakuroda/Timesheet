@@ -35,13 +35,13 @@ At appointments page you can use the filters to get the list of registrations an
 - Docker
 - NodeJS
 
-At `Timesheet/Timesheet/ClientApp` folder, run the following commands:
+At `root/Timesheet/ClientApp` folder, run the following commands:
 ```
 npm install
 npm run build
 ```
 
-At `Timesheet` folder:
+At `root` folder:
 ```
 docker-compose build --no-cache
 docker-compose up
