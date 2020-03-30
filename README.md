@@ -31,16 +31,6 @@ At appointments page you can use the filters to get the list of registrations an
 
 ## To get started with docker:
 
-### PRE REQ:
-- Docker
-- NodeJS
-
-At `root/Timesheet/ClientApp` folder, run the following commands:
-```
-npm install
-npm run build
-```
-
 At `root` folder:
 ```
 docker-compose build --no-cache
