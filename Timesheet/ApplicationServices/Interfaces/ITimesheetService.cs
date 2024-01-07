@@ -10,7 +10,7 @@
     {
         Task<Timesheet> PostAsync(Timesheet timesheet);
 
-        Task<Timesheet> GetAsync(Guid id);
+        ValueTask<Timesheet> GetAsync(Guid id);
 
         Task<List<Timesheet>> GetAllAsync(TimesheetFilterDTO filterDto);
     }

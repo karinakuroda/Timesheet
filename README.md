@@ -30,7 +30,10 @@ so that I can create correct invoices for my customers
 At appointments page you can use the filters to get the list of registrations and get a full overview of your projects
 
 ## To get started with docker:
-
+Go to the `ClientApp` folder:
+```
+npm install
+```
 At `root` folder:
 ```
 docker-compose build --no-cache

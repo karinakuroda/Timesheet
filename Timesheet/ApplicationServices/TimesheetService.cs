@@ -22,7 +22,7 @@
             return this.timesheetRepository.PostAsync(timesheet);
         }
 
-        public Task<Timesheet> GetAsync(Guid id)
+        public ValueTask<Timesheet> GetAsync(Guid id)
         {
             return this.timesheetRepository.GetAsync(id);
         }
