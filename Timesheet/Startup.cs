@@ -84,13 +84,6 @@ namespace Timesheet
             app.UseSpaStaticFiles();
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
             app.UseMvc();
-            
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller}/{action=Index}/{id?}");
-            //});
 
             app.UseSpa(spa =>
             {
