@@ -37,8 +37,9 @@ namespace Timesheet
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            var connection = ConfigurationExtensions.GetConnectionString(this.Configuration, "DefaultConnection");
-            services.AddDbContext<TimesheetContext>(options => options.UseSqlServer(connection));
+            var connection = ConfigurationExtensions.GetConnectionString(this.Configuration, "DefaultConnectionPsg");
+            services.AddDbContext<TimesheetContext>(options => options.UseNpgsql(connection));
+            
             var context = services.BuildServiceProvider().GetRequiredService<TimesheetContext>();
             context.Database.Migrate();
 
@@ -83,7 +84,7 @@ namespace Timesheet
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
-            app.UseMvc();
+            // app.UseMvc();
 
             app.UseSpa(spa =>
             {

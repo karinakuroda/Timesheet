@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
     web:
         build: .
@@ -16,3 +16,20 @@ services:
         environment:
             SA_PASSWORD: "Your_password123"
             ACCEPT_EULA: "Y"
+            
+    postgres: # define the service name
+        image: postgres # specify the image to use
+        restart: always # restart the container automatically
+        environment: # set the environment variables
+            POSTGRES_USER: postgres # the database user
+            POSTGRES_PASSWORD: secret # the database password
+            POSTGRES_DB: mydb # the database name
+        ports: # expose the ports
+            - 5432:5432 # format is HOST:CONTAINER
+        volumes: # mount the volumes to persist data
+            - db-data:/var/lib/postgresql/data # format is VOLUME:CONTAINER
+
+volumes: # define the volume name
+    db-data: # the volume name
+            
+    
