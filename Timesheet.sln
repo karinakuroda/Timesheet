@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{769B43
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Back", "Back", "{0C72A836-B64B-4818-B9DC-F4071AD94EBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{105444A8-FF9D-4564-8B7E-614605D648E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,11 +31,19 @@ Global
 		{9ED32F67-97FE-4F19-9352-5D265B75011E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9ED32F67-97FE-4F19-9352-5D265B75011E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9ED32F67-97FE-4F19-9352-5D265B75011E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{105444A8-FF9D-4564-8B7E-614605D648E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{105444A8-FF9D-4564-8B7E-614605D648E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{105444A8-FF9D-4564-8B7E-614605D648E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{105444A8-FF9D-4564-8B7E-614605D648E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11048E9B-4A64-4FED-8E5E-E3C1CC5DC77F}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{105444A8-FF9D-4564-8B7E-614605D648E9} = {0C72A836-B64B-4818-B9DC-F4071AD94EBF}
+		{9ED32F67-97FE-4F19-9352-5D265B75011E} = {0C72A836-B64B-4818-B9DC-F4071AD94EBF}
 	EndGlobalSection
 EndGlobal

@@ -26,7 +26,7 @@ Obj/
 
 # Visual Studio/Rider directory
 .vs/
-.idea
+.idea/
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
